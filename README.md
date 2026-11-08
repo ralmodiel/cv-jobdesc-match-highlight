@@ -15,10 +15,12 @@ counts as a nice-to-have.
 You download the result as PDF or Word. With the same format as the upload, your own file is edited in place, so the
 design stays exactly yours. The other format is rebuilt in a clean one-column layout.
 
-It also lists the lines that open weakly ("Responsible for…", "Helped…") with action verbs that fit each one: the line's
-own action first ("Involved in the design of…" → Designed), then verbs the language model picks by meaning. A verb
-that fits one trade only ("Patrolled") is offered only when the line mentions that trade, and a line that says you
-helped is not offered "Led". These are suggestions: the words in your file are yours to change.
+It also lists the lines that open weakly ("Responsible for…", "Helped…", "Leveraged…") with action verbs that fit each
+one: the line's own action first ("Involved in the design of…" → Designed), then verbs the job ad itself uses (marked
+"in ad"), then verbs the language model picks by meaning. A verb that fits one trade only ("Patrolled") is offered only
+when the line mentions that trade, and a line that says you helped is not offered "Led". A verb that opens three or
+more lines ("Managed") is flagged with others of its kind. These are suggestions: the words in your file are yours to
+change.
 
 ## Privacy
 

@@ -207,7 +207,7 @@ export default function App() {
         <Terms result={result} terms={terms} exclude={exclude} onToggle={toggle} onAdd={add} lm={reqs.length ? lm : null} ranked={!!semNow}
           hasCv={!!cv} hasText={!!jobText.trim()} />
         <Emphasis styles={styles} onStyles={setStyles} density={density} onDensity={setDensity} />
-        <Verbs cv={cv} />
+        <Verbs cv={cv} job={jobText.slice(0, LIMITS.jobChars)} />
       </main>
 
       <footer className="mx-auto max-w-6xl px-4 pb-10 text-sm text-ink-3 sm:px-6">
