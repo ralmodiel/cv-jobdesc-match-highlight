@@ -1,0 +1,159 @@
+@import "tailwindcss";
+
+/* --edge outlines a control (fields, drop zone, chips) at 3:1 or more; --raised is the chosen part of a segmented control */
+:root {
+  color-scheme: light dark;
+  --paper: #f7f6f3; --surface: #ffffff; --surface-2: #f0eee9; --desk: #e8e5de;
+  --ink: #1c1b1f; --ink-2: #47464e; --ink-3: #64636b; --line: #e0ddd5; --line-2: #cfcbc1; --edge: #8d897f; --raised: var(--surface);
+  --accent: #1f48b8; --accent-ink: #ffffff; --accent-soft: #e6ecfb;
+  --ok: #17663a; --ok-soft: #e3f3e8; --warn: #8a4b00; --warn-soft: #fdf0dc; --bad: #a61b1b; --bad-soft: #fce8e8;
+  --hl: #fff176; --shadow: 0 1px 2px rgb(28 27 31 / .06), 0 8px 24px -12px rgb(28 27 31 / .18);
+  --dur: .2s;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #16161a; --surface: #1f1f25; --surface-2: #29292f; --desk: #0e0e11;
+    --ink: #ececf1; --ink-2: #c9c9d1; --ink-3: #a2a2ab; --line: #34343c; --line-2: #4a4a53; --edge: #7b7b86; --raised: var(--line-2);
+    --accent: #8fb0ff; --accent-ink: #0d1530; --accent-soft: #1f2a48;
+    --ok: #7fd69c; --ok-soft: #173322; --warn: #f3c37a; --warn-soft: #3a2a12; --bad: #ff9d9d; --bad-soft: #3d1a1a;
+    --shadow: 0 1px 2px rgb(0 0 0 / .4), 0 8px 24px -12px rgb(0 0 0 / .6);
+  }
+}
+
+@theme inline {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: ui-serif, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --color-paper: var(--paper); --color-surface: var(--surface); --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink); --color-ink-2: var(--ink-2); --color-ink-3: var(--ink-3);
+  --color-line: var(--line); --color-accent: var(--accent); --color-accent-soft: var(--accent-soft);
+  --color-ok: var(--ok); --color-warn: var(--warn); --color-bad: var(--bad);
+}
+
+@layer base {
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans); line-height: 1.5; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+::selection { background: var(--hl); color: #1c1b1f; }
+.sr-only-focusable:not(:focus) { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.skip { position: absolute; left: .75rem; top: .75rem; z-index: 60; background: var(--surface); color: var(--ink); padding: .5rem .9rem; border-radius: .5rem; box-shadow: var(--shadow); }
+}
+
+@layer components {
+/* Highlighter stroke behind a word, as the CV gets; it runs to the bottom of the box, or a descender ("g") hangs dark on a dark page */
+.hl { background: linear-gradient(transparent 6%, var(--hl) 6%) no-repeat 0 0 / 100% 100%;
+  color: #1c1b1f; padding: 0 .12em .08em; margin: 0 -.06em; border-radius: .15em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+@media (prefers-reduced-motion: no-preference) {
+  .hl-sweep { animation: sweep .9s .25s cubic-bezier(.3, .7, .2, 1) both; }
+  @keyframes sweep { from { background-size: 0% 100%, 100% 100%; } }
+  /* on a dark page the dark letters ahead of the sweep need a faint stroke under them; the full stroke covers it at the end */
+  @media (prefers-color-scheme: dark) {
+    .hl-sweep { background-image: linear-gradient(transparent 6%, var(--hl) 6%), linear-gradient(transparent 6%, color-mix(in srgb, var(--hl) 55%, transparent) 6%); }
+  }
+}
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+.step { display: inline-grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 999px; font-size: .75rem; font-weight: 700;
+  background: var(--surface-2); color: var(--ink-2); flex: none; }
+.step.done { background: var(--ok-soft); color: var(--ok); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 2.75rem; padding: .55rem 1.1rem; border-radius: 10px;
+  font-weight: 600; font-size: .875rem; border: 1px solid transparent; cursor: pointer; transition: background var(--dur), border-color var(--dur), transform var(--dur); }
+.btn:active { transform: translateY(1px); }
+.btn[disabled] { opacity: .55; cursor: not-allowed; transform: none; }
+.btn-primary { background: var(--accent); color: var(--accent-ink); }
+.btn-primary:not([disabled]):hover { background: color-mix(in oklab, var(--accent) 88%, var(--ink)); }
+/* a faded blue reads as broken; a grey button reads as "not yet" */
+.btn-primary[disabled] { opacity: 1; background: var(--surface-2); color: var(--ink-3); border-color: var(--line-2); }
+.btn-ghost { background: transparent; color: var(--ink); border-color: var(--line-2); }
+.btn-ghost:not([disabled]):hover { background: var(--surface-2); }
+.btn-sm { min-height: 2.25rem; padding: .3rem .75rem; }
+.link { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
+
+.drop { border: 2px dashed var(--edge); border-radius: 14px; background: var(--surface-2); transition: border-color var(--dur), background var(--dur); }
+.drop:hover, .drop.over { border-color: var(--accent); background: var(--accent-soft); }
+.drop:focus-within { border-color: var(--accent); outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.field { width: 100%; border: 1px solid var(--edge); border-radius: 12px; background: var(--surface); color: var(--ink); padding: .7rem .85rem; font: inherit; }
+.field:focus-visible { outline: 2px solid var(--accent); outline-offset: 0; border-color: var(--accent); }
+textarea.field { resize: vertical; min-height: 9rem; line-height: 1.45; }
+.field::placeholder { color: var(--ink-3); }
+
+/* Segmented radio group: native radios, styled as one control */
+.seg { display: flex; padding: 3px; gap: 2px; border-radius: 11px; background: var(--surface-2); border: 1px solid var(--line); }
+.seg label { flex: 1; position: relative; }
+.seg input { position: absolute; inset: 0; opacity: 0; cursor: pointer; margin: 0; }
+.seg label > span { display: flex; align-items: center; justify-content: center; gap: .3rem; min-height: 2.25rem; padding: .25rem .4rem; border-radius: 8px;
+  font-size: .875rem; color: var(--ink-2); transition: background var(--dur), color var(--dur), box-shadow var(--dur); text-align: center; line-height: 1.15; }
+.seg input:checked + span { background: var(--raised); color: var(--ink); font-weight: 600; box-shadow: 0 1px 2px rgb(0 0 0 / .12), 0 0 0 1px var(--line); }
+.seg input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 1px; }
+.seg label:hover input:not(:checked) + span { color: var(--ink); }
+fieldset:disabled .seg { opacity: .55; }
+/* the file decides the format (a Word CV picks Word), so before there is one nothing is chosen */
+fieldset:disabled .seg input:checked + span { background: none; box-shadow: none; font-weight: inherit; color: var(--ink-2); }
+fieldset:disabled .seg input { cursor: not-allowed; }
+
+.swatch { position: relative; width: 2.25rem; height: 2.25rem; }
+.swatch input { position: absolute; inset: 0; opacity: 0; margin: 0; cursor: pointer; }
+.swatch span { display: block; width: 100%; height: 100%; border-radius: 999px; border: 1px solid rgb(0 0 0 / .18); }
+.swatch input:checked + span { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+.swatch input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 4px; }
+
+.chip { display: inline-flex; align-items: center; gap: .35rem; min-height: 2rem; padding: .2rem .65rem; border-radius: 999px; font-size: .875rem;
+  border: 1px solid var(--edge); background: var(--surface); color: var(--ink); cursor: pointer; transition: background var(--dur), opacity var(--dur); }
+button.chip:hover { background: var(--surface-2); }
+.chip[aria-pressed="false"] { color: var(--ink-3); text-decoration: line-through; background: transparent; border-style: dashed; }
+.chip .n { font-size: .75rem; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.chip.missing { background: var(--warn-soft); border-color: transparent; color: var(--warn); }
+button.chip.missing:hover { background: var(--warn-soft); border-color: currentColor; }
+/* a term the CV lacks, with nothing related to mark, is a gap and not a control: an outline, no fill */
+span.chip.missing { cursor: default; background: transparent; border: 1px dashed currentColor; }
+.chip.missing[aria-pressed="false"] { background: transparent; color: var(--ink-3); border-color: currentColor; }
+@media (pointer: coarse) { .chip { min-height: 2.5rem; } .btn-sm, .seg label > span { min-height: 2.75rem; } .swatch { width: 2.75rem; height: 2.75rem; } }
+
+.meter { height: .5rem; border-radius: 999px; background: var(--line-2); overflow: hidden; }
+.meter > i { display: block; height: 100%; border-radius: inherit; background: var(--accent); transition: width .5s ease; }
+
+/* Preview: pages on a desk */
+.desk { background: var(--desk); border-radius: 16px; padding: 16px; }
+.desk canvas { display: block; width: 100%; height: auto; background: #fff; border-radius: 3px; box-shadow: 0 1px 3px rgb(0 0 0 / .2), 0 12px 32px -16px rgb(0 0 0 / .35); }
+.desk canvas + canvas { margin-top: 16px; }
+.stale { opacity: .6; transition: opacity var(--dur); }
+
+.legend b { font-weight: 700; }
+.legend u { text-decoration-thickness: 1.5px; text-underline-offset: 2px; }
+.legend mark { background: var(--hl); color: #1c1b1f; padding: 0 .15em; border-radius: 2px; }
+
+.alert { border-radius: 12px; padding: .7rem .9rem; font-size: .875rem; }
+.alert.bad { background: var(--bad-soft); color: var(--bad); }
+.alert.warn { background: var(--warn-soft); color: var(--warn); }
+.alert.ok { background: var(--ok-soft); color: var(--ok); }
+
+details.privacy summary { list-style: none; cursor: pointer; }
+details.privacy summary::-webkit-details-marker { display: none; }
+
+@keyframes spin { to { transform: rotate(1turn); } }
+.spin { animation: spin .8s linear infinite; }
+@keyframes fade-in { from { opacity: 0; transform: translateY(6px); } }
+@media (prefers-reduced-motion: no-preference) { .fade-in { animation: fade-in .35s ease both; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; } .spin { animation: spin 1.6s linear infinite !important; } }
+
+.drag-overlay { position: fixed; inset: 0; z-index: 50; display: grid; place-items: center; background: color-mix(in oklab, var(--accent) 22%, transparent);
+  backdrop-filter: blur(2px); pointer-events: none; }
+
+/* Layout: one column on phones (CV, job, preview, terms, style); the last two side by side on tablets;
+   controls beside a sticky, scrollable preview on wide screens */
+.layout { display: flex; flex-direction: column; gap: 1.25rem; }
+@media (min-width: 768px) and (max-width: 1023.98px) {
+  .layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+  .layout > :not(#step-terms, #step-style) { grid-column: 1 / -1; }
+}
+@media (min-width: 1024px) {
+  /* the last row takes any height the preview needs beyond the cards, so no gaps open between them */
+  .layout { display: grid; grid-template-columns: minmax(0, 25rem) minmax(0, 1fr); grid-template-rows: repeat(3, auto) 1fr; align-items: start; }
+  .layout > * { grid-column: 1; }
+  .layout > .preview-col { grid-column: 2; grid-row: 1 / -1; position: sticky; top: 1rem; }
+  .preview-col > .card { display: flex; flex-direction: column; max-height: calc(100dvh - 2rem); }
+  .preview-col .desk { flex: 1; min-height: 0; overflow: auto; }
+}
+main:focus { outline: none; }
+}
