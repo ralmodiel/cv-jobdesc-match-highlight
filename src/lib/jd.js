@@ -14,9 +14,10 @@ const RULES = [
   ["resp", /\b(responsibilit|what you('|’)ll do|what you will do|the role|your role|duties|day[- ]to[- ]day|you will|in this role|key tasks|job description|role overview|the job|the opportunity)/i],
 ];
 export const SECTION_WEIGHT = { title: 1, req: 1, resp: 0.85, other: 0.7, nice: 0.6, about: 0.15, benefits: 0, eeo: 0, apply: 0, waived: 0 };
-// A requirement the ad waives ("AWS and GraphQL are not required", "No degree needed", "You don't need SQL"): its terms are never
-// listed as missing. "Not required, but a plus" still counts as a nice-to-have.
-const WAIVED = /(?:\bnot|n['’]t)\s+(?:strictly\s+)?(?:required|needed|necessary|essential|mandatory|a\s+(?:must|requirement|prerequisite))\b|\bno\s+(?:[^\s,.;!?]+\s+){0,4}?(?:required|needed|necessary)\b|\b(?:(?:do|does|will)\s+not|(?:don|doesn|won)['’]t)\s+(?:need|require)\b/i;
+// A requirement the ad waives ("AWS and GraphQL are not required", "Neither AWS nor GraphQL is required", "No degree needed",
+// "You don't need SQL", "No need for AWS", "AWS (optional)", but not "not optional"): its terms are never listed as missing.
+// "Not required, but a plus" still counts as a nice-to-have.
+const WAIVED = /(?:\bnot|n['’]t)\s+(?:strictly\s+)?(?:required|needed|necessary|essential|mandatory|expected|a\s+(?:must|requirement|prerequisite))\b|\bneither\b[^.;!?]*\bnor\b[^.;!?]*?\b(?:required|needed|necessary|essential|mandatory|expected)\b|\bno\s+(?:[^\s,.;!?]+\s+){0,4}?(?:required|needed|necessary)\b|\bno\s+need\b|(?<!\bnot\s|n['’]t\s)\boptional\b|\b(?:(?:do|does|will)\s+not|(?:don|doesn|won)['’]t)\s+(?:need|require)\b/i;
 const NICE = RULES.find(([k]) => k === "nice")[1];
 
 // EDGE: filler that is trimmed off the ends of a phrase ("strong experience with X" → X).

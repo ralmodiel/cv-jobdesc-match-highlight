@@ -9,7 +9,8 @@ Add a CV (PDF or Word) and paste a job ad. CV Highlighter marks the parts of the
 All three are highlighted in green by default. Step 4 turns any of them into bold or underline, and changes the colour.
 Words that every CV in a field has ("software development", "networking") and acronyms with more than one meaning
 (GCP: Google Cloud or Good Clinical Practice) are not marked unless you add them yourself. What the ad says is not
-needed ("AWS and GraphQL are not required", "No degree needed") is never listed as missing; "not required, but a plus"
+needed ("AWS and GraphQL are not required", "Neither AWS nor GraphQL is required", "No degree needed", "AWS
+(optional)") is never listed as missing; "not required, but a plus"
 counts as a nice-to-have.
 
 You download the result as PDF or Word. With the same format as the upload, your own file is edited in place, so the
